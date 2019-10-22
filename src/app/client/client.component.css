@@ -1,0 +1,31 @@
+mat-card-content{
+    text-align: center;
+}
+mat-select, mat-card-actions{
+    text-align: center;
+}
+.mat-tab-label{
+    color: #41005d;
+    box-shadow: 0px 0px 4px -1px;
+    border-radius: 3vh 3vh 0 0;
+    overflow: unset;
+}
+.add-client-btn{
+    position: absolute;
+    left: -3rem;
+}
+.mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron{
+    border-color: #7b1fa266;
+}
+.mat-tab-header-pagination-chevron{
+    border-color: #7b1fa2;
+}
+.counter{
+    font-size: xx-large;
+    font-size: -webkit-xxx-large;
+    /* font-family: 'Roboto Mono', monospace; */
+    
+}
+.counter > span{
+    font-family: 'B612 Mono', monospace;
+}

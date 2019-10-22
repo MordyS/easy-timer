@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <h4 class="modal-title">דו"ח שעות ל {{data.clients[data.selected].Name}} - {{reportMonthText}} {{data.reportYear}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <table class="table table-striped text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>יום</th>
+                <th>כניסה</th>
+                <th>יציאה</th>
+                <th>ס"ה</th>
+                <th>לתשלום</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of rowsToShow; let rowIndex = index;">
+                <td>{{+row.In.substring(3,5)}}</td>
+                <td>
+                    <span *ngIf="!isRowEditable(rowIndex)">{{row.In.substring(11)}}</span>
+                    <input style="max-width: 120px; text-align: center;" type="text" *ngIf="isRowEditable(rowIndex)" [(ngModel)]="editFrom">
+                </td>
+                <td>
+                    <span *ngIf="!isRowEditable(rowIndex)">{{row.out ? row.out.substring(11) : ''}}</span>
+                    <input style="max-width: 120px; text-align: center;" type="text" *ngIf="isRowEditable(rowIndex)" [(ngModel)]="editTo">
+                </td>
+                <td>{{row.sum ? row.sum.timeDisplay : ''}}</td>
+                <td>{{row.sum ? (row.sum.timeCalculate * 30).toFixed(2) : ''}}</td>
+                <td>
+                    <button mat-icon-button (click)="editRow(row.index)" *ngIf="!isRowEditable(rowIndex)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="saveRow(row.index)" *ngIf="isRowEditable(rowIndex)">
+                        <mat-icon>done</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="deleteRow(row.index)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <span style="position: absolute; right: 2rem;">ס"ה לתשלום {{sumPayment.toFixed(2)}} על {{sumHours}} שעות</span>
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

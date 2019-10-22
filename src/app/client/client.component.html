@@ -1,0 +1,74 @@
+<mat-tab-group (selectedTabChange)="selectedTab($event)" #tabs>
+
+    <mat-tab *ngFor="let client of clients; let clientIndex = index" [attr.data-index]="clientIndex">
+        <ng-template mat-tab-label>
+            <b>{{client.Name}}</b>
+            <button  mat-icon-button (click)="deleteClient(clientIndex)">
+                <mat-icon>delete</mat-icon>
+            </button>
+            <button *ngIf="clientIndex == clients.length -1" mat-icon-button (click)="addClient()" class="add-client-btn">
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+        </ng-template>
+        <ng-template matTabContent>
+            <mat-card>
+                <mat-card-title></mat-card-title>
+
+                <mat-card-content>
+                    <div class="row">
+
+                        <div class="col-12 col-md-8">
+                            <div class="counter">
+                                <span>{{counterH}}</span>:<span>{{counterM}}</span>:<span>{{counterS}}</span></div>
+                            <button (click)="toggleCounter()" mat-raised-button
+                                color="primary">{{isCounting ? strings.stop : strings.start}}</button>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <p>{{strings.totalHoursM}}: {{sumHoursMonth}}</p>
+                            <p>{{strings.totalMoneyM}}: {{sumPaymentMonth.toFixed(2)}}</p>
+                            <br>
+                            <p>{{strings.totalHoursD}}: {{sumHoursDay}}</p>
+                            <p>{{strings.totalMoneyD}}: {{sumPaymentDay.toFixed(2)}}</p>
+                        </div>
+
+                    </div>
+                </mat-card-content>
+
+                <mat-card-actions>
+                    <button (click)="openReport()">הצג</button>
+                    <span> דו"ח שעות </span>
+                    <!-- <mat-form-field>
+                        <mat-select [(ngModel)]="reportType">
+                            <mat-option *ngFor="let type of reportTypes" [value]="type.name">
+                              {{type.val}}
+                            </mat-option>
+                          </mat-select>
+                    </mat-form-field> -->
+                    <span> לחודש </span>
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="reportMonth">
+                            <mat-option *ngFor="let month of months" [value]="month.name">
+                              {{month.val}}
+                            </mat-option>
+                          </mat-select>
+                    </mat-form-field>
+                    <span> שנה </span>
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="reportYear">
+                            <mat-option *ngFor="let year of years" [value]="year">
+                              {{year}}
+                            </mat-option>
+                          </mat-select>
+                    </mat-form-field>
+                </mat-card-actions>
+            </mat-card>
+        </ng-template>
+    </mat-tab>
+    <!-- <mat-tab tabindex="-1">
+        <ng-template mat-tab-label>
+            <button mat-icon-button (click)="addClirnt()">
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+        </ng-template>
+    </mat-tab> -->
+</mat-tab-group>
