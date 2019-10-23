@@ -30,15 +30,8 @@ import { AuthGuard } from './auth.guard';
 import { HomeComponent } from './home/home.component';
 import { ReportComponent } from './report/report.component';
 
-const config = {
-  apiKey: "AIzaSyDwsnsjyTINBQAdPd0gJJuhlF62Y5spygM",
-  authDomain: "easytimer-d4fd4.firebaseapp.com",
-  databaseURL: "https://easytimer-d4fd4.firebaseio.com",
-  projectId: "easytimer-d4fd4",
-  storageBucket: "",
-  messagingSenderId: "254530246171",
-  appId: "1:254530246171:web:79bc6bbd0e784ce9810abe"
-};
+declare var require: any;
+const config = require('../../apikey.json')
 
 @NgModule({
   declarations: [
