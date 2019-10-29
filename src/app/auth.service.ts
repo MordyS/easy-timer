@@ -116,6 +116,7 @@ export class AuthService {
   get isLoggedIn(){
     return !!this.user
   }
+
   // If error, console log and notify user
   private handleError(error: Error) {
     console.error(error);

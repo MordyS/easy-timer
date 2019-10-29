@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   MatButtonModule,
   MatFormFieldModule,
@@ -29,6 +29,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { HomeComponent } from './home/home.component';
 import { ReportComponent } from './report/report.component';
+import { SettingsComponent } from './settings/settings.component';
 
 declare var require: any;
 const config = require('../../apikey.json')
@@ -39,7 +40,8 @@ const config = require('../../apikey.json')
     ClientComponent,
     LoginComponent,
     HomeComponent,
-    ReportComponent
+    ReportComponent,
+    SettingsComponent
   ],
   imports: [
     NgbModule,
@@ -63,6 +65,6 @@ const config = require('../../apikey.json')
   ],
   providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent],
-  entryComponents: [ReportComponent]
+  entryComponents: [ReportComponent, SettingsComponent]
 })
 export class AppModule { }

@@ -84,7 +84,7 @@ export class ReportComponent implements AfterContentInit {//AfterViewInit {
   }
   get sumPayment() {
     return this.rowsToShow.reduce((a, b) => {
-      return b.sum ? b.sum.timeCalculate * 30 + a : a
+      return b.sum ? b.sum.timeCalculate * (this.data.clients[this.data.selected].Settings.wage || 30) + a : a
     }, 0)
   }
 }

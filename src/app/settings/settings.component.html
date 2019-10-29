@@ -1,0 +1,23 @@
+<mat-card class="text-center">
+    <mat-card-title>{{clientName}}</mat-card-title>
+
+    <mat-card-content>
+
+        <div class="form-group">
+            <label for="name">שם לקוח</label>
+            <input [(ngModel)]="clientName" type="text" class="form-control" id="name" aria-describedby="nameHelp"
+                placeholder="הזן שם">
+            <small id="nameHelp" class="form-text text-muted">ערוך את שם הלקוח</small>
+        </div>
+        <div class="form-group">
+            <label for="wage">מחיר לשעה</label>
+            <input [(ngModel)]="wage" type="number" class="form-control" id="wage" placeholder="30"
+                aria-describedby="wageHelp">
+            <small id="wageHelp" class="form-text text-muted">יש להזין את המחיר השעתי ללקוח זה לצורך החישובים</small>
+        </div>
+    </mat-card-content>
+    <mat-card-footer>
+        <button class="btn btn-primary btn-lg m-3" (click)="save()">שמור</button>
+        <button class="btn btn-outline-light btn-lg m-3" (click)="cancel()">ביטול</button>
+    </mat-card-footer>
+</mat-card>
