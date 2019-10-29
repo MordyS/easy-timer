@@ -8,9 +8,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class StoreService {
   user: any;
+  clients: any
+  selectedClient
+  selectedIndex: number
 
   constructor(private auth: AuthService, private afAuth: AngularFireAuth, private afs: AngularFirestore) { 
-    this.user = auth.user
+    this.afAuth.authState.subscribe(auth => {
+      this.user = auth   
+    })
   }
 
   saveClients(c){
@@ -20,4 +25,5 @@ export class StoreService {
     }
     return userRef.set(data, { merge: true });
   }
+
 }

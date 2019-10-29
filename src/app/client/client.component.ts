@@ -24,7 +24,7 @@ export class ClientComponent implements OnInit {
   counterM: string
   counterS: string
   selectedIndex = 0
-  clients
+  clients = []
   user
   reportTypes
   months
@@ -53,18 +53,25 @@ export class ClientComponent implements OnInit {
   getUserData() {
     this.afAuth.authState.subscribe(auth => {
       const userRef = this.afs.collection('users').doc(auth.uid)
-      userRef.valueChanges().subscribe(doc => {
-        this.clients = doc['clients']
+      userRef.valueChanges().subscribe((doc: any) => {
+        if (doc.clients && doc.clients.length) {
+          this.clients = doc.clients
+          this.store.clients = this.clients
+        } else {
+          this.addClient()
+        }
       })
     })
   }
   ngOnInit() {
-    this.updateCounter()
     this.getUserData()
+    this.updateCounter()
   }
 
   selectedTab(e) {
     this.selectedIndex = e.index
+    this.store.selectedClient = this.selectedClient
+    this.store.selectedIndex = this.selectedIndex
   }
   toggleCounter() {
     if (this.isCounting) {
@@ -80,7 +87,7 @@ export class ClientComponent implements OnInit {
   addClient(){
     this.clients.push({
       Name: 'לקוח חדש',
-      Settings: [],
+      Settings: {wage: 30},
       Times: []
     })
     this.saveClients()
@@ -89,13 +96,14 @@ export class ClientComponent implements OnInit {
     }, 250);
   }
   deleteClient(i){
-    console.log(i)
+    this.clients.splice(i, 1)
+    this.saveClients()
   }
   get selectedClient() {
     return this.clients[this.selectedIndex]
   }
   get isCounting() {
-    if (this.selectedClient.Times.length == 0) return false
+    if (!this.selectedClient || this.selectedClient.Times.length == 0) return false
     return !this.selectedClient.Times[this.selectedClient.Times.length - 1].out
   }
   get dateNow() {
@@ -112,7 +120,7 @@ export class ClientComponent implements OnInit {
     return this.selectedClient.Times
       .filter(t => +t.In.substring(0, 2) == new Date().getMonth()+1 && t.In.substring(6, 10) == new Date().getFullYear())
       .reduce((a, b) => {
-        return CalculateDiff(b.In, b.out).timeCalculate * 30 + a
+        return CalculateDiff(b.In, b.out).timeCalculate * (this.selectedClient.Settings.wage || 30) + a
       }, 0)
   }
   get sumHoursDay() {
@@ -126,7 +134,7 @@ export class ClientComponent implements OnInit {
     return this.selectedClient.Times
       .filter(t => t.In.substring(0, 10) == this.dateNow.substring(0, 10))
       .reduce((a, b) => {
-        return CalculateDiff(b.In, b.out).timeCalculate * 30 + a
+        return CalculateDiff(b.In, b.out).timeCalculate * (this.selectedClient.Settings.wage || 30) + a
       }, 0)
   }
   updateCounter = () => {
