@@ -3,10 +3,11 @@
     <mat-tab *ngFor="let client of clients; let clientIndex = index" [attr.data-index]="clientIndex">
         <ng-template mat-tab-label>
             <b>{{client.Name}}</b>
-            <button  mat-icon-button (click)="deleteClient(clientIndex)">
+            <button mat-icon-button (click)="deleteClient(clientIndex)">
                 <mat-icon>delete</mat-icon>
             </button>
-            <button *ngIf="clientIndex == clients.length -1" mat-icon-button (click)="addClient()" class="add-client-btn">
+            <button *ngIf="clientIndex == clients.length -1" mat-icon-button (click)="addClient()"
+                class="add-client-btn">
                 <mat-icon>add_circle_outline</mat-icon>
             </button>
         </ng-template>
@@ -15,6 +16,7 @@
                 <mat-card-title></mat-card-title>
 
                 <mat-card-content>
+                    <span class="float-right">תעריף לשעה: {{client.Settings.wage}}</span>
                     <div class="row">
 
                         <div class="col-12 col-md-8">
@@ -24,18 +26,18 @@
                                 color="primary">{{isCounting ? strings.stop : strings.start}}</button>
                         </div>
                         <div class="col-12 col-md-4">
-                            <p>{{strings.totalHoursM}}: {{sumHoursMonth}}</p>
-                            <p>{{strings.totalMoneyM}}: {{sumPaymentMonth.toFixed(2)}}</p>
+                            <p>{{strings.totalHoursM}}: <span class="h5">{{sumHoursMonth.substring(0,5)}}</span></p>
+                            <p>{{strings.totalMoneyM}}: <span class="h5">{{sumPaymentMonth.toFixed(2)}}</span></p>
                             <br>
-                            <p>{{strings.totalHoursD}}: {{sumHoursDay}}</p>
-                            <p>{{strings.totalMoneyD}}: {{sumPaymentDay.toFixed(2)}}</p>
+                            <p>{{strings.totalHoursD}}: <span class="h5">{{sumHoursDay.substring(0,5)}}</span></p>
+                            <p>{{strings.totalMoneyD}}: <span class="h5">{{sumPaymentDay.toFixed(2)}}</span></p>
                         </div>
 
                     </div>
                 </mat-card-content>
 
                 <mat-card-actions>
-                    <button (click)="openReport()">הצג</button>
+                    <button mat-raised-button color="primary" (click)="openReport()">הצג</button>
                     <span> דו"ח שעות </span>
                     <!-- <mat-form-field>
                         <mat-select [(ngModel)]="reportType">
@@ -48,17 +50,17 @@
                     <mat-form-field>
                         <mat-select [(ngModel)]="reportMonth">
                             <mat-option *ngFor="let month of months" [value]="month.name">
-                              {{month.val}}
+                                {{month.val}}
                             </mat-option>
-                          </mat-select>
+                        </mat-select>
                     </mat-form-field>
                     <span> שנה </span>
                     <mat-form-field>
                         <mat-select [(ngModel)]="reportYear">
                             <mat-option *ngFor="let year of years" [value]="year">
-                              {{year}}
+                                {{year}}
                             </mat-option>
-                          </mat-select>
+                        </mat-select>
                     </mat-form-field>
                 </mat-card-actions>
             </mat-card>
@@ -72,3 +74,6 @@
         </ng-template>
     </mat-tab> -->
 </mat-tab-group>
+<div class="text-center p-5" *ngIf="!clients.length">
+    <button class="btn-lg pr-5 pl-5 p-2" mat-raised-button color="primary" (click)="addClient()">יצירת לקוח</button>
+</div>

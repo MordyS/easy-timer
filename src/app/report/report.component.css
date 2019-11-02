@@ -1,3 +1,14 @@
 .close{
     margin-left: 0%;
 }
+::ng-deep .timepicker-overlay, ::ng-deep .timepicker-backdrop-overlay{
+    z-index: 1100 !important;
+}
+
+::ng-deep .clock-face__container {
+    margin-left: 100px !important;
+}
+
+::ng-deep .timepicker__header {
+    direction: ltr !important;
+}

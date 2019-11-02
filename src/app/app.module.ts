@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {
   MatButtonModule,
   MatFormFieldModule,
@@ -11,7 +12,8 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatCardModule,
-  MatTabsModule
+  MatTabsModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 import { AngularFireModule } from '@angular/fire';
@@ -57,6 +59,8 @@ const config = require('../../apikey.json')
     MatIconModule,
     MatCardModule,
     MatTabsModule,
+    MatSnackBarModule,
+    NgxMaterialTimepickerModule.setLocale('en-US'),
     AngularFireModule.initializeApp(config),
     AngularFirestoreModule,
     AngularFireAuthModule,

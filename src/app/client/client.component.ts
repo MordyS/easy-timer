@@ -32,12 +32,13 @@ export class ClientComponent implements OnInit {
   reportYear = new Date().getFullYear()
   reportType
   reportMonth
+  clientIndexEditName = -1
   constructor(private modalService: NgbModal, private stringsService: StringsService, private auth: AuthService, private afAuth: AngularFireAuth, private afs: AngularFirestore, private store: StoreService) {
     this.strings = stringsService.strings
     this.reportTypes = stringsService.strings['reportTypes']
     this.reportType = this.reportTypes[0]['name']
     this.months = stringsService.strings['months']
-    this.reportMonth = 'm' + String(new Date().getMonth()+1)
+    this.reportMonth = 'm' + String(new Date().getMonth() + 1)
     this.user = auth.user
   }
   openReport() {
@@ -54,11 +55,10 @@ export class ClientComponent implements OnInit {
     this.afAuth.authState.subscribe(auth => {
       const userRef = this.afs.collection('users').doc(auth.uid)
       userRef.valueChanges().subscribe((doc: any) => {
+        console.log(doc);
         if (doc.clients && doc.clients.length) {
           this.clients = doc.clients
-          this.store.clients = this.clients
-        } else {
-          this.addClient()
+          this.store.clients = doc.clients
         }
       })
     })
@@ -84,18 +84,18 @@ export class ClientComponent implements OnInit {
   saveClients() {
     this.store.saveClients(this.clients)
   }
-  addClient(){
+  addClient() {
     this.clients.push({
       Name: 'לקוח חדש',
-      Settings: {wage: 30},
+      Settings: { wage: 30 },
       Times: []
     })
     this.saveClients()
     setTimeout(() => {
-      this.tabs.selectedIndex = this.clients.length - 1  
+      this.tabs.selectedIndex = this.clients.length - 1
     }, 250);
   }
-  deleteClient(i){
+  deleteClient(i) {
     this.clients.splice(i, 1)
     this.saveClients()
   }
@@ -111,14 +111,14 @@ export class ClientComponent implements OnInit {
   }
   get sumHoursMonth() {
     return this.selectedClient.Times
-      .filter(t => +t.In.substring(0, 2) == new Date().getMonth()+1 && t.In.substring(6, 10) == new Date().getFullYear())
+      .filter(t => +t.In.substring(0, 2) == new Date().getMonth() + 1 && t.In.substring(6, 10) == new Date().getFullYear())
       .reduce((a, b) => {
         return AddDiff(a, CalculateDiff(b.In, b.out).timeDisplay)
       }, '00:00:00')
   }
   get sumPaymentMonth() {
     return this.selectedClient.Times
-      .filter(t => +t.In.substring(0, 2) == new Date().getMonth()+1 && t.In.substring(6, 10) == new Date().getFullYear())
+      .filter(t => +t.In.substring(0, 2) == new Date().getMonth() + 1 && t.In.substring(6, 10) == new Date().getFullYear())
       .reduce((a, b) => {
         return CalculateDiff(b.In, b.out).timeCalculate * (this.selectedClient.Settings.wage || 30) + a
       }, 0)

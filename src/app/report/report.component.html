@@ -1,5 +1,6 @@
 <div class="modal-header">
-    <h4 class="modal-title">דו"ח שעות ל {{data.clients[data.selected].Name}} - {{reportMonthText}} {{data.reportYear}}</h4>
+    <h4 class="modal-title">דו"ח שעות ל {{data.clients[data.selected].Name}} - {{reportMonthText}} {{data.reportYear}}
+    </h4>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -20,22 +21,20 @@
             <tr *ngFor="let row of rowsToShow; let rowIndex = index;">
                 <td>{{+row.In.substring(3,5)}}</td>
                 <td>
-                    <span *ngIf="!isRowEditable(rowIndex)">{{row.In.substring(11)}}</span>
-                    <input style="max-width: 120px; text-align: center;" type="text" *ngIf="isRowEditable(rowIndex)" [(ngModel)]="editFrom">
+                    <input [ngxTimepicker]="fullTime" class="mat-input-element" [format]="24"
+                        [value]="row.In.substring(11,16)" readonly>
+                    <ngx-material-timepicker (timeSet)="saveTimeIn($event,rowIndex)" #fullTime>
+                    </ngx-material-timepicker>
                 </td>
                 <td>
-                    <span *ngIf="!isRowEditable(rowIndex)">{{row.out ? row.out.substring(11) : ''}}</span>
-                    <input style="max-width: 120px; text-align: center;" type="text" *ngIf="isRowEditable(rowIndex)" [(ngModel)]="editTo">
+                    <input [ngxTimepicker]="fullTime" class="mat-input-element" [format]="24"
+                        [value]="row.Out.substring(11,16)" readonly>
+                    <ngx-material-timepicker (timeSet)="saveTimeOut($event,rowIndex)" #fullTime>
+                    </ngx-material-timepicker>
                 </td>
                 <td>{{row.sum ? row.sum.timeDisplay : ''}}</td>
-                <td>{{row.sum ? (row.sum.timeCalculate * 30).toFixed(2) : ''}}</td>
+                <td>{{row.sum ? (row.sum.timeCalculate * wage).toFixed(2) : ''}}</td>
                 <td>
-                    <button mat-icon-button (click)="editRow(row.index)" *ngIf="!isRowEditable(rowIndex)">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="saveRow(row.index)" *ngIf="isRowEditable(rowIndex)">
-                        <mat-icon>done</mat-icon>
-                    </button>
                     <button mat-icon-button (click)="deleteRow(row.index)">
                         <mat-icon>delete</mat-icon>
                     </button>

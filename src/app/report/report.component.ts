@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, AfterViewInit, AfterContentInit } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { StringsService } from '../strings.service';
 import { StoreService } from '../store.service';
 import { CalculateDiff, AddDiff } from '../calculateDiff';
@@ -17,11 +18,8 @@ export class ReportComponent implements AfterContentInit {//AfterViewInit {
   rowsToShow
   reportTypeText = ''
   reportMonthText = ''
-  rowEditing: any;
-  editFrom: any;
-  editTo: any;
 
-  constructor(public activeModal: NgbActiveModal, private stringsService: StringsService, private store: StoreService) {
+  constructor(public activeModal: NgbActiveModal, private stringsService: StringsService, private store: StoreService, private snackbar: MatSnackBar) {
     this.reportTypes = stringsService.strings['reportTypes']
     this.months = stringsService.strings['months']
 
@@ -40,35 +38,26 @@ export class ReportComponent implements AfterContentInit {//AfterViewInit {
       .sort((a, b) => a.In > b.In ? 1 : a.In < b.In ? -1 : 0)
   }
 
-  isRowEditable(i) {
-    return this.rowEditing == i
-  }
-
-  editRow(i) {
-    this.rowEditing = i
-    this.editFrom = this.rowsToShow.find(r => r.index == i).In.substring(11, 16)
-    this.editTo = this.rowsToShow.find(r => r.index == i).out.substring(11, 16)
-  }
-
-  saveRow(i) {
+  saveTimeIn(t, i) {
     let data = this.data.clients
-    let In, Out;
-    let regex = /^([012]\d:\d\d)$|^(\d:\d\d)$/
+    let time = this.rowsToShow.find(r => r.index == i).In.substring(0, 11) + t + ':00'
+    if (!(CalculateDiff(time, this.rowsToShow.find(r => r.index == i).out).timeCalculate > 0)) {
+      this.snackbar.open('לתשומת לבך, שעת יציאה לפני שעת כניסה!','OK',{duration: 3000})
+    }
+    data[this.data.selected].Times[i].In = time
+    this.rowsToShow[this.rowsToShow.findIndex(r => r.index == i)].In = time
+    this.store.saveClients(data)
+  }
 
-    if (regex.test(this.editFrom) && (!this.editFrom.length || regex.test(this.editFrom))) {
-      In = this.rowsToShow.find(r => r.index == i).In.substring(0, 11) + (this.editFrom.length == 4 ? '0' + this.editFrom : this.editFrom) + ':00'
-      Out = this.rowsToShow.find(r => r.index == i).out.substring(0, 11) + (this.editTo.length == 4 ? '0' + this.editTo : this.editTo) + ':00'
+  saveTimeOut(t, i) {
+    let data = this.data.clients
+    let time = this.rowsToShow.find(r => r.index == i).Out.substring(0, 11) + t + ':00'
+    if (!(CalculateDiff(this.rowsToShow.find(r => r.index == i).In, time).timeCalculate > 0)) {
+      this.snackbar.open('לתשומת לבך, שעת יציאה לפני שעת כניסה!','OK',{duration: 3000})
     }
-    if (CalculateDiff(In, Out).timeCalculate > 0) {
-      this.rowEditing = null
-      data[this.data.selected].Times[i].In = In
-      data[this.data.selected].Times[i].out = Out
-      this.rowsToShow[this.rowsToShow.findIndex(r => r.index == i)].In = In
-      this.rowsToShow[this.rowsToShow.findIndex(r => r.index == i)].out = Out
-      this.store.saveClients(data)
-      return
-    }
-    alert('יש לכתוב שעה במבנה של 13:00')
+    data[this.data.selected].Times[i].out = time
+    this.rowsToShow[this.rowsToShow.findIndex(r => r.index == i)].out = time
+    this.store.saveClients(data)
   }
 
   deleteRow(i) {
@@ -84,7 +73,11 @@ export class ReportComponent implements AfterContentInit {//AfterViewInit {
   }
   get sumPayment() {
     return this.rowsToShow.reduce((a, b) => {
-      return b.sum ? b.sum.timeCalculate * (this.data.clients[this.data.selected].Settings.wage || 30) + a : a
+      return b.sum ? b.sum.timeCalculate * this.wage + a : a
     }, 0)
+  }
+
+  get wage() {
+    return this.data.clients[this.data.selected].Settings.wage || 30
   }
 }

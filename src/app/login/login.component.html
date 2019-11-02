@@ -1,3 +1,9 @@
-<div class="login">
-    <button (click)="loginWithGoogle()">{{strings.signinWithGoogle}}</button>
-</div>
+<mat-card class="h-75 text-center">
+    <div class="h5 m-4">
+        <p>ברוכים הבאים ל'שעה קלה', מערכת נוחה לפרילנסרים לניהול רישום שעות עבודה</p>
+        <p>באפשרותך להיכנס באמצעות חשבון הגוגל שלך, כך אפשר להיכנס למערכת מכל מחשב והנתונים ישמרו.</p>
+    </div>
+
+    <button mat-raised-button color="primary" class="btn-lg p-4"
+        (click)="loginWithGoogle()">{{strings.signinWithGoogle}}</button>
+</mat-card>
