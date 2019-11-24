@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import {
   MatButtonModule,
   MatFormFieldModule,
@@ -32,6 +32,11 @@ import { AuthGuard } from './auth.guard';
 import { HomeComponent } from './home/home.component';
 import { ReportComponent } from './report/report.component';
 import { SettingsComponent } from './settings/settings.component';
+
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { MessagingService } from './messaging.service';
+import { AsyncPipe } from '../../node_modules/@angular/common';
 
 declare var require: any;
 const config = require('../../apikey.json')
@@ -65,9 +70,12 @@ const config = require('../../apikey.json')
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    FormsModule
+    FormsModule,
+    AngularFireMessagingModule,
+    AngularFireDatabaseModule,
+
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService, AuthGuard, MessagingService, AsyncPipe],
   bootstrap: [AppComponent],
   entryComponents: [ReportComponent, SettingsComponent]
 })

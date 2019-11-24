@@ -19,17 +19,17 @@
         </thead>
         <tbody>
             <tr *ngFor="let row of rowsToShow; let rowIndex = index;">
-                <td>{{+row.In.substring(3,5)}}</td>
+                <td>{{row.In.substring(3,5)}}</td>
                 <td>
-                    <input [ngxTimepicker]="fullTime" class="mat-input-element" [format]="24"
+                    <input [ngxTimepicker]="timein" class="mat-input-element" [format]="24"
                         [value]="row.In.substring(11,16)" readonly>
-                    <ngx-material-timepicker (timeSet)="saveTimeIn($event,rowIndex)" #fullTime>
+                    <ngx-material-timepicker (timeSet)="saveTimeIn($event,rowIndex)" #timein>
                     </ngx-material-timepicker>
                 </td>
                 <td>
-                    <input [ngxTimepicker]="fullTime" class="mat-input-element" [format]="24"
-                        [value]="row.Out.substring(11,16)" readonly>
-                    <ngx-material-timepicker (timeSet)="saveTimeOut($event,rowIndex)" #fullTime>
+                    <input [ngxTimepicker]="timeout" class="mat-input-element" [format]="24"
+                        [value]="row.out.substring(11,16)" readonly>
+                    <ngx-material-timepicker (timeSet)="saveTimeOut($event,rowIndex)" #timeout>
                     </ngx-material-timepicker>
                 </td>
                 <td>{{row.sum ? row.sum.timeDisplay : ''}}</td>

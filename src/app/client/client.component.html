@@ -20,6 +20,7 @@
                     <div class="row">
 
                         <div class="col-12 col-md-8">
+                                {{ message | async | json }}
                             <div class="counter">
                                 <span>{{counterH}}</span>:<span>{{counterM}}</span>:<span>{{counterS}}</span></div>
                             <button (click)="toggleCounter()" mat-raised-button

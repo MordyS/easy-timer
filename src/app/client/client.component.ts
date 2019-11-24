@@ -8,6 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ReportComponent } from '../report/report.component';
 import { CalculateDiff, AddDiff, DateNow } from './../calculateDiff'
+import { MessagingService } from "./../messaging.service";
 
 @Component({
   selector: 'app-client',
@@ -19,6 +20,7 @@ export class ClientComponent implements OnInit {
 
   @ViewChild('tabs', { static: false }) tabs: MatTabGroup;
 
+  message
   strings
   counterH: string
   counterM: string
@@ -33,7 +35,7 @@ export class ClientComponent implements OnInit {
   reportType
   reportMonth
   clientIndexEditName = -1
-  constructor(private modalService: NgbModal, private stringsService: StringsService, private auth: AuthService, private afAuth: AngularFireAuth, private afs: AngularFirestore, private store: StoreService) {
+  constructor(private modalService: NgbModal, private stringsService: StringsService, private auth: AuthService, private afAuth: AngularFireAuth, private afs: AngularFirestore, private store: StoreService, private msg: MessagingService) {
     this.strings = stringsService.strings
     this.reportTypes = stringsService.strings['reportTypes']
     this.reportType = this.reportTypes[0]['name']
@@ -56,7 +58,7 @@ export class ClientComponent implements OnInit {
       const userRef = this.afs.collection('users').doc(auth.uid)
       userRef.valueChanges().subscribe((doc: any) => {
         console.log(doc);
-        if (doc.clients && doc.clients.length) {
+        if (doc && doc.clients && doc.clients.length) {
           this.clients = doc.clients
           this.store.clients = doc.clients
         }
@@ -66,6 +68,15 @@ export class ClientComponent implements OnInit {
   ngOnInit() {
     this.getUserData()
     this.updateCounter()
+    this.receiveMsg()
+  }
+
+  receiveMsg() {
+    this.afAuth.authState.subscribe(auth => {
+      this.msg.requestPermission(auth.uid)
+      this.msg.receiveMessage()
+      this.message = this.msg.currentMessage
+    })
   }
 
   selectedTab(e) {

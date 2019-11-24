@@ -6,4 +6,8 @@
 
     <button mat-raised-button color="primary" class="btn-lg p-4"
         (click)="loginWithGoogle()">{{strings.signinWithGoogle}}</button>
+    <br><br>
+    <input [(ngModel)]="phone">
+    <button id="sign-in-button" (click)="loginWithPhone()">sign in with phone</button>
+    <div id="phone-sign-in-recaptcha"></div>
 </mat-card>

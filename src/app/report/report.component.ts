@@ -30,19 +30,22 @@ export class ReportComponent implements AfterContentInit {//AfterViewInit {
     console.log(this.data)
     this.reportTypeText = this.reportTypes.find(r => r.name == this.data.reportType).val
     this.reportMonthText = this.months.find(m => m.name == this.data.reportMonth).val
-    this.rowsToShow = this.data.clients[this.data.selected].Times.map((time, index) => {
+    this.rowsToShow = this.data.clients[this.data.selected].Times.filter(t => {
+      return +t.In.substring(0, 2) == +this.data.reportMonth.substring(1) && t.In.substring(6, 10) == this.data.reportYear
+        && t.out
+    }).map((time, index) => {
       time.index = index
       time.sum = time.out ? CalculateDiff(time.In, time.out) : null
       return time
-    }).filter(t => +t.In.substring(0, 2) == +this.data.reportMonth.substring(1) && t.In.substring(6, 10) == this.data.reportYear)
-      .sort((a, b) => a.In > b.In ? 1 : a.In < b.In ? -1 : 0)
+    }).sort((a, b) => a.In > b.In ? 1 : a.In < b.In ? -1 : 0)
   }
 
   saveTimeIn(t, i) {
     let data = this.data.clients
+    console.log(this.rowsToShow)
     let time = this.rowsToShow.find(r => r.index == i).In.substring(0, 11) + t + ':00'
     if (!(CalculateDiff(time, this.rowsToShow.find(r => r.index == i).out).timeCalculate > 0)) {
-      this.snackbar.open('לתשומת לבך, שעת יציאה לפני שעת כניסה!','OK',{duration: 3000})
+      this.snackbar.open('לתשומת לבך, שעת יציאה לפני שעת כניסה!', 'OK', { duration: 3000 })
     }
     data[this.data.selected].Times[i].In = time
     this.rowsToShow[this.rowsToShow.findIndex(r => r.index == i)].In = time
@@ -53,7 +56,7 @@ export class ReportComponent implements AfterContentInit {//AfterViewInit {
     let data = this.data.clients
     let time = this.rowsToShow.find(r => r.index == i).Out.substring(0, 11) + t + ':00'
     if (!(CalculateDiff(this.rowsToShow.find(r => r.index == i).In, time).timeCalculate > 0)) {
-      this.snackbar.open('לתשומת לבך, שעת יציאה לפני שעת כניסה!','OK',{duration: 3000})
+      this.snackbar.open('לתשומת לבך, שעת יציאה לפני שעת כניסה!', 'OK', { duration: 3000 })
     }
     data[this.data.selected].Times[i].out = time
     this.rowsToShow[this.rowsToShow.findIndex(r => r.index == i)].out = time
