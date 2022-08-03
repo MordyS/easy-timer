@@ -28,7 +28,7 @@ export class ClientComponent implements OnInit {
   user
   reportTypes
   months
-  years = [2019]
+  years = [202,2023,2024,2025,2026,2027]
   reportYear = new Date().getFullYear()
   reportType
   reportMonth
